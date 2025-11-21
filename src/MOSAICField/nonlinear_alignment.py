@@ -12,7 +12,7 @@ def warp_image(image, field, device):
 
     Args:
         image (torch.Tensor): The input image tensor with shape [1, C, H, W].
-        field (torch.Tensor): The flow field tensor with shape [1, 2, H, W], representing displacement field.
+        field (torch.Tensor): The displacement field tensor with shape [1, 2, H, W].
         device (torch.device): The device (CPU or CUDA) to perform the computation on.
 
     Returns:
@@ -24,23 +24,23 @@ def warp_image(image, field, device):
 
 def warp_image_reverse(image, field, device):
     """
-    Warp an image by a displacement field using the SpatialTransformer in backward mode.
+    Warp a target image by a displacement field using the SpatialTransformer in backward mode.
 
     Parameters
     ----------
     image : torch.Tensor
         Input image tensor with shape [1, C, H, W]. Will be converted to float and moved to `device`.
     field : torch.Tensor
-        Dense displacement/flow field tensor with shape [1, 2, H, W] describing pixel displacements.
+        Displacement field tensor with shape [1, 2, H, W].
     device : torch.device or str
         Target device for computation and outputs (e.g. 'cpu' or torch.device('cuda')).
 
     Returns
     -------
     warped_image : torch.Tensor
-        The image warped according to `field`, shape [1, C, H, W]. Located on `device`.
+        The target image warped by reversing `field`, shape [1, C, H, W]. Located on `device`.
     phi : torch.Tensor
-        The deformation grid / transformed field returned by the SpatialTransformer,
+        The forward deformation (See README for details),
         shape [1, 2, H, W]. Located on `device`.
     """
     ST = Utils.SpatialTransformer(field.shape[2:]).to(device)
