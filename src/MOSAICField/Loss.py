@@ -1,5 +1,4 @@
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 
 
@@ -25,11 +24,13 @@ def JacobianDet(J):
     det = dx[..., 0] * dy[..., 1] - dx[..., 1] * dy[..., 0]
     return det
 
+
 def neg_Jdet_loss(J):
     Jdet = JacobianDet(J)
     neg_Jdet = -1.0 * (Jdet - 0.5)
     selected_neg_Jdet = F.relu(neg_Jdet)
-    return torch.mean(selected_neg_Jdet ** 2)
+    return torch.mean(selected_neg_Jdet**2)
+
 
 def magnitude_loss(all_v):
     all_v_x_2 = all_v[:, 0, :, :] * all_v[:, 0, :, :]
